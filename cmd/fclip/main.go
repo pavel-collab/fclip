@@ -13,8 +13,8 @@ import (
 func main() {
 	if len(os.Args) < 2 {
 		fmt.Println("Использование:")
-		fmt.Println("  myclip copy   # копировать из stdin в буфер обмена")
-		fmt.Println("  myclip paste  # вставить из буфера обмена в stdout")
+		fmt.Println("  fclip copy   # копировать из stdin в буфер обмена")
+		fmt.Println("  fclip paste  # вставить из буфера обмена в stdout")
 		os.Exit(1)
 	}
 
