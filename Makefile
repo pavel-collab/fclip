@@ -17,6 +17,10 @@ release:
 test:
 	go test ./... -v
 
+install:
+	@echo "Installing"
+	go install ./cmd/fclip/...
+
 ## Очистка
 clean:
 	rm -rf $(BIN_DIR)
