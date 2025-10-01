@@ -7,25 +7,25 @@ import (
 	"github.com/atotto/clipboard"
 )
 
-// ErrClipboardUnavailable возвращается, когда буфер обмена недоступен.
+// ErrClipboardUnavailable is returned when the clipboard is unavailable.
 var ErrClipboardUnavailable = errors.New("буфер обмена недоступен")
 
-// ErrEmptyData возвращается при попытке копирования пустых данных.
+// ErrEmptyData is returned when attempting to copy empty data.
 var ErrEmptyData = errors.New("данные для копирования пустые")
 
-// Copy сохраняет данные в буфер обмена.
-// Возвращает ошибку, если данные пустые или буфер обмена недоступен.
+// Copy saves data to the clipboard.
+// Returns an error if the data is empty or the clipboard is unavailable.
 func Copy(data string) error {
-	// Проверяем, что данные не пустые
+    // Ensure the data is not empty
 	if strings.TrimSpace(data) == "" {
 		return ErrEmptyData
 	}
 	
-	// Проверяем доступность буфера обмена
+    // Check clipboard availability
 	if !clipboard.Unsupported {
 		err := clipboard.WriteAll(data)
 		if err != nil {
-			// Проверяем, является ли это ошибкой недоступности буфера обмена
+            // Check whether this is a clipboard unavailability error
 			if strings.Contains(strings.ToLower(err.Error()), "no clipboard utilities available") {
 				return ErrClipboardUnavailable
 			}
@@ -37,14 +37,14 @@ func Copy(data string) error {
 	return ErrClipboardUnavailable
 }
 
-// Paste извлекает данные из буфера обмена.
-// Возвращает ошибку, если буфер обмена недоступен.
+// Paste retrieves data from the clipboard.
+// Returns an error if the clipboard is unavailable.
 func Paste() (string, error) {
-	// Проверяем доступность буфера обмена
+    // Check clipboard availability
 	if !clipboard.Unsupported {
 		data, err := clipboard.ReadAll()
 		if err != nil {
-			// Проверяем, является ли это ошибкой недоступности буфера обмена
+            // Check whether this is a clipboard unavailability error
 			if strings.Contains(strings.ToLower(err.Error()), "no clipboard utilities available") {
 				return "", ErrClipboardUnavailable
 			}
@@ -56,12 +56,12 @@ func Paste() (string, error) {
 	return "", ErrClipboardUnavailable
 }
 
-// IsAvailable проверяет, доступен ли буфер обмена в текущей системе.
+// IsAvailable checks whether the clipboard is available on the current system.
 func IsAvailable() bool {
 	return !clipboard.Unsupported
 }
 
-// GetStatus возвращает статус буфера обмена.
+// GetStatus returns the clipboard status.
 func GetStatus() string {
 	if IsAvailable() {
 		return "доступен"

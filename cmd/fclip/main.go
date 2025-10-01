@@ -14,8 +14,8 @@ const (
 	exitError   = 1
 )
 
-// main - точка входа для CLI утилиты.
-// Поддерживает команды: copy (чтение из stdin в буфер обмена), paste (вывод в stdout).
+// main - entry point for the CLI utility.
+// Supports commands: copy (read from stdin to clipboard), paste (print to stdout).
 func main() {
 	if len(os.Args) < 2 {
 		printUsage()
@@ -27,12 +27,12 @@ func main() {
 	switch command {
 	case "copy":
 		if err := handleCopy(); err != nil {
-			fmt.Fprintf(os.Stderr, "Ошибка при копировании: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Ошибка при копировании: %v\n", err)
 			os.Exit(exitError)
 		}
 	case "paste":
 		if err := handlePaste(); err != nil {
-			fmt.Fprintf(os.Stderr, "Ошибка при вставке: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Ошибка при вставке: %v\n", err)
 			os.Exit(exitError)
 		}
 	case "status":
@@ -42,13 +42,13 @@ func main() {
 		printUsage()
 		os.Exit(exitSuccess)
 	default:
-		fmt.Fprintf(os.Stderr, "Неизвестная команда: %s\n", command)
-		fmt.Fprintln(os.Stderr, "Используйте 'fclip help' для просмотра доступных команд")
+        fmt.Fprintf(os.Stderr, "Неизвестная команда: %s\n", command)
+        fmt.Fprintln(os.Stderr, "Используйте 'fclip help' для просмотра доступных команд")
 		os.Exit(exitError)
 	}
 }
 
-// printUsage выводит справку по использованию программы.
+// printUsage prints usage help for the program.
 func printUsage() {
 	fmt.Println("fclip - утилита для работы с буфером обмена")
 	fmt.Println()
@@ -63,21 +63,21 @@ func printUsage() {
 	fmt.Println("  fclip paste > file.txt")
 }
 
-// handleCopy обрабатывает команду копирования.
+// handleCopy handles the copy command.
 func handleCopy() error {
-	// Проверяем, что stdin не пустой
+    // Ensure stdin is not empty
 	data, err := io.ReadAll(os.Stdin)
 	if err != nil {
 		return fmt.Errorf("ошибка чтения из stdin: %w", err)
 	}
 	
-	// Проверяем, что данные не пустые
+    // Ensure the data is not empty
 	dataStr := string(data)
 	if strings.TrimSpace(dataStr) == "" {
 		return fmt.Errorf("stdin пустой или содержит только пробельные символы")
 	}
 	
-	// Проверяем размер данных (ограничиваем для безопасности)
+    // Validate data size (limit for safety)
 	const maxSize = 1024 * 1024 // 1MB
 	if len(data) > maxSize {
 		return fmt.Errorf("данные слишком большие (максимум %d байт)", maxSize)
@@ -90,7 +90,7 @@ func handleCopy() error {
 	return nil
 }
 
-// handlePaste обрабатывает команду вставки.
+// handlePaste handles the paste command.
 func handlePaste() error {
 	data, err := clipboard.Paste()
 	if err != nil {
@@ -101,7 +101,7 @@ func handlePaste() error {
 	return nil
 }
 
-// handleStatus обрабатывает команду проверки статуса буфера обмена.
+// handleStatus handles the command that checks clipboard status.
 func handleStatus() {
 	if clipboard.IsAvailable() {
 		fmt.Println("✅ Буфер обмена доступен")
